@@ -67,11 +67,10 @@ class MaxHeap {
 
   _float(i) {
     let parent = this._parent(i);
-    let node = i;
-    while(parent > 0 && this._priority(parent) > this._priority(node)) {
-      this._swap(node, parent);
-      node = parent;
-      parent = this._parent(node);
+    while(parent > 0 && this._priority(parent) < this._priority(i)) {
+      this._swap(i, parent);
+      i = parent;
+      parent = this._parent(i);
     }
   }
 
@@ -84,7 +83,7 @@ class MaxHeap {
 
       let highestPriority = i;
 
-      if (leftChild <= this._count && this._priority(leftChild) > this._priority(highestPriority)){
+      if (leftChild <= this._count && this._priority(leftChild) > this._priority(i)){
         highestPriority = leftChild;
       }
 
@@ -102,7 +101,10 @@ class MaxHeap {
   }
 
   _buildheap() {
-    // TODO
+    const midpoint = Math.floor(this._count / 2);
+    for (let i = midpoint; i > 0; i--){
+      this._sink(i);
+    }
   }
 
   /**
@@ -139,9 +141,8 @@ class MaxHeap {
     const rootData = this._storage[1].element;
     this._storage[1].element = undefined;
 
-    this._count -= 1;
-
     this._swap(1, this._count);
+    this._count -= 1;
     this._sink(1);
 
     return rootData;
@@ -165,7 +166,13 @@ class MaxHeap {
    * @returns Sorted storage array. Note that the array is 1-indexed (so the first element is null)
    */
   sort() {
-    // TODO
+    for (let i = this._count; i > 0; i--){
+      this._swap(1, this._count);
+      this._count -= 1;
+      this._sink(1);
+    }
+
+    return this._storage;
   }
 }
 
