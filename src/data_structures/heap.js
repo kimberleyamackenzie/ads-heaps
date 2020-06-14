@@ -76,7 +76,29 @@ class MaxHeap {
   }
 
   _sink(i) {
-    // TODO
+    let foundMax = false;
+
+    while (!foundMax){
+      const leftChild = this._left(i);
+      const rightChild = this._right(i);
+
+      let highestPriority = i;
+
+      if (leftChild <= this._count && this._priority(leftChild) > this._priority(highestPriority)){
+        highestPriority = leftChild;
+      }
+
+      if (rightChild <= this._count && this._priority(rightChild) > this._priority(highestPriority)){
+        highestPriority = rightChild;
+      }
+
+      if (highestPriority === i){
+        foundMax = true;
+      } else {
+        this._swap(i, highestPriority);
+        i = highestPriority;
+      }
+    }
   }
 
   _buildheap() {
@@ -110,7 +132,19 @@ class MaxHeap {
    * @returns {*} The data stored in the highest-priority record, or undefined if the queue is empty
    */
   removeMax() {
-    // TODO
+    if (this._count === 0){
+      return undefined;
+    }
+
+    const rootData = this._storage[1].element;
+    this._storage[1].element = undefined;
+
+    this._count -= 1;
+
+    this._swap(1, this._count);
+    this._sink(1);
+
+    return rootData;
   }
 
   /**
